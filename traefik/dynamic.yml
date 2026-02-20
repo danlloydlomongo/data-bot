@@ -1,0 +1,53 @@
+http:
+  routers:
+    phpmyadmin:
+      rule: "Host(`pma.localhost`) || Host(`pma.test`)"
+      service: phpmyadmin
+      entryPoints:
+        - web
+
+    laravel:
+      rule: "Host(`app.localhost`) || Host(`data-bot.test`)"
+      service: laravel
+      entryPoints:
+        - web
+
+    fastapi:
+      rule: "Host(`api.localhost`) || Host(`fastapi.test`)"
+      service: fastapi
+      entryPoints:
+        - web
+
+    soketi:
+      rule: "Host(`ws.localhost`) || Host(`ws.test`)"
+      service: soketi
+      entryPoints:
+        - web
+
+    traefik-dashboard:
+      rule: "Host(`traefik.localhost`) || Host(`traefik.test`)"
+      service: api@internal
+      entryPoints:
+        - web
+
+  services:
+    phpmyadmin:
+      loadBalancer:
+        servers:
+          - url: "http://phpmyadmin:80"
+
+    laravel:
+      loadBalancer:
+        servers:
+          - url: "http://nginx:80"
+
+    fastapi:
+      loadBalancer:
+        servers:
+          - url: "http://fastapi:8000"
+
+    soketi:
+      loadBalancer:
+        servers:
+          - url: "http://soketi:6001"
+

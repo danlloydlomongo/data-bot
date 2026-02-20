@@ -35,8 +35,7 @@ tinker: ## Open Laravel Tinker
 init-laravel: ## Scaffold Laravel 12 with Inertia + Vue
 	mkdir -p laravel
 	$(DOCKER_COMPOSE) build laravel
-	$(DOCKER_COMPOSE) run --rm laravel composer create-project laravel/laravel /tmp/laravel
-	$(DOCKER_COMPOSE) run --rm laravel sh -c "cp -a /tmp/laravel/. /var/www/html/"
+	$(DOCKER_COMPOSE) run --rm laravel sh -c "composer create-project laravel/laravel /tmp/laravel-app && cp -a /tmp/laravel-app/. /var/www/html/"
 	$(DOCKER_COMPOSE) run --rm laravel php artisan key:generate
 	$(DOCKER_COMPOSE) run --rm laravel composer require inertiajs/inertia-laravel
 	$(DOCKER_COMPOSE) run --rm laravel sh -c "npm install && npm install @inertiajs/vue3 vue @vitejs/plugin-vue"

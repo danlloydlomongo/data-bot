@@ -8,10 +8,10 @@ help: ## Show available commands
 build: ## Build all Docker images
 	$(DOCKER_COMPOSE) build
 
-up: ## Start all services
+run: ## Start all services
 	$(DOCKER_COMPOSE) up -d
 
-up-dev: ## Start all services + Vite dev server
+run-dev: ## Start all services + Vite dev server
 	$(DOCKER_COMPOSE) --profile dev up -d
 
 down: ## Stop all services

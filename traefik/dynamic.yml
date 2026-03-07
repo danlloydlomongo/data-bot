@@ -7,13 +7,13 @@ http:
         - web
 
     laravel:
-      rule: "Host(`app.localhost`) || Host(`data-bot.test`)"
+      rule: "Host(`app.localhost`) || Host(`data-bot.test`) || Host(`association.test`)"
       service: laravel
       entryPoints:
         - web
 
     fastapi:
-      rule: "Host(`api.localhost`) || Host(`fastapi.test`)"
+      rule: "Host(`api.localhost`) || Host(`api.test`) || Host(`fastapi.test`)"
       service: fastapi
       entryPoints:
         - web

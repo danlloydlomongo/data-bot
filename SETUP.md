@@ -21,7 +21,22 @@ EOF'
 
 Or manually edit `/etc/hosts` and add the entries above.
 
-## Step 2: Initialize Laravel (if not already done)
+## Step 2: Configure Environment Variables
+
+This project uses a centralized `env/` directory plus a root `.env` file:
+
+- The root `.env` (next to `docker-compose.yml`) holds shared infrastructure settings (database, MongoDB, Soketi/Pusher, etc.). Adjust these if you need different local credentials.
+- Per-service env files live in `env/` and are already wired into `docker-compose.yml` via `env_file`:
+  - `env/laravel.env`
+  - `env/fastapi.env`
+  - `env/mariadb.env`
+  - `env/phpmyadmin.env`
+  - `env/mongodb.env`
+  - `env/soketi.env`
+  - `env/queue-worker.env`
+- For normal local development you typically **don’t need to edit** these files; they have sensible defaults that match the root `.env`. If you customize settings for a specific service, edit its corresponding file under `env/`.
+
+## Step 3: Initialize Laravel (if not already done)
 
 If the `laravel/` directory is empty or doesn't have a Laravel installation:
 
@@ -35,7 +50,7 @@ This will:
 - Generate application key
 - Set up dependencies
 
-## Step 3: Build Docker Images
+## Step 4: Build Docker Images
 
 Build all Docker images:
 
@@ -43,21 +58,21 @@ Build all Docker images:
 make build
 ```
 
-## Step 4: Start Services
+## Step 5: Start Services
 
 Start all services:
 
 ```bash
-make up
+make run
 ```
 
 Or for development with Vite dev server:
 
 ```bash
-make up-dev
+make run-dev
 ```
 
-## Step 5: Verify Services
+## Step 6: Verify Services
 
 Check that all services are running:
 
@@ -65,7 +80,7 @@ Check that all services are running:
 docker compose ps
 ```
 
-## Step 6: Access Your Services
+## Step 7: Access Your Services
 
 Once running, you can access:
 
@@ -75,7 +90,7 @@ Once running, you can access:
 - **phpMyAdmin**: http://pma.test
 - **WebSocket Server**: http://ws.test
 
-## Step 7: Run Laravel Migrations (if needed)
+## Step 8: Run Laravel Migrations (if needed)
 
 If you have migrations:
 
@@ -109,7 +124,7 @@ make shell
 ## Quick Reference
 
 - `make help` - Show all available commands
-- `make up` - Start services
+- `make run` - Start services
 - `make down` - Stop services
 - `make logs` - View logs
 - `make artisan cmd="command"` - Run Laravel artisan commands

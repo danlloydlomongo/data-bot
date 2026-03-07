@@ -2,6 +2,16 @@
 
 Follow these steps to get your data-bot project up and running:
 
+## Quick Start (one command)
+
+For a **from-scratch local setup** (destroy any existing volumes, rebuild containers, run migrations, and seed data) you can run:
+
+```bash
+make run-fresh
+```
+
+Then open `http://data-bot.test` in your browser to test if it works.
+
 ## Step 1: Configure Host Aliases
 
 Add the following entries to your `/etc/hosts` file (requires sudo):
@@ -32,6 +42,7 @@ This project uses a centralized `env/` directory plus a root `.env` file:
   - `env/mariadb.env`
   - `env/phpmyadmin.env`
   - `env/mongodb.env`
+  - `env/mongo-express.env`
   - `env/soketi.env`
   - `env/queue-worker.env`
 - For normal local development you typically **don’t need to edit** these files; they have sensible defaults that match the root `.env`. If you customize settings for a specific service, edit its corresponding file under `env/`.
@@ -88,14 +99,21 @@ Once running, you can access:
 - **FastAPI**: http://fastapi.test
 - **Traefik Dashboard**: http://traefik.test
 - **phpMyAdmin**: http://pma.test
+- **Mongo Express (MongoDB)**: http://mongo.test
 - **WebSocket Server**: http://ws.test
 
-## Step 8: Run Laravel Migrations (if needed)
+## Step 8: Run Laravel Migrations (and seed data)
 
-If you have migrations:
+If you just need to apply migrations:
 
 ```bash
 make artisan cmd="migrate"
+```
+
+For a **full fresh setup** (destroy volumes, rebuild containers, run migrations, and seed data in one command):
+
+```bash
+make run-fresh
 ```
 
 ## Troubleshooting
@@ -123,8 +141,9 @@ make shell
 
 ## Quick Reference
 
-- `make help` - Show all available commands
+- `make run-fresh` - Fresh rebuild + migrate and seed database
 - `make run` - Start services
+- `make help` - Show all available commands
 - `make down` - Stop services
 - `make logs` - View logs
 - `make artisan cmd="command"` - Run Laravel artisan commands

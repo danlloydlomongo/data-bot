@@ -24,6 +24,12 @@ http:
       entryPoints:
         - web
 
+    mongo-express:
+      rule: "Host(`mongo.localhost`) || Host(`mongo.test`)"
+      service: mongo-express
+      entryPoints:
+        - web
+
     traefik-dashboard:
       rule: "Host(`traefik.localhost`) || Host(`traefik.test`)"
       service: api@internal
@@ -50,4 +56,9 @@ http:
       loadBalancer:
         servers:
           - url: "http://soketi:6001"
+
+    mongo-express:
+      loadBalancer:
+        servers:
+          - url: "http://mongo-express:8081"
 

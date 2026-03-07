@@ -152,6 +152,23 @@ services:
     networks:
       - web
 
+  # ─────────────── Mongo Express (MongoDB UI) ───────────────
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_started
+    env_file:
+      - ./env/mongo-express.env
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.mongo-express.rule=Host(`mongo.localhost`) || Host(`mongo.test`)
+      - traefik.http.services.mongo-express.loadbalancer.server.port=8081
+    networks:
+      - web
+
   # ─────────────── Soketi (WebSocket Server) ───────────────
   soketi:
     image: quay.io/soketi/soketi:1.6-16-debian

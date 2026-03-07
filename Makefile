@@ -1,4 +1,4 @@
-.PHONY: help build up up-dev down restart logs shell artisan tinker init-laravel fresh
+.PHONY: help build up up-dev down restart logs shell artisan tinker init-laravel fresh run-fresh
 
 DOCKER_COMPOSE = docker compose
 
@@ -32,17 +32,23 @@ artisan: ## Run artisan command (usage: make artisan cmd="migrate")
 tinker: ## Open Laravel Tinker
 	$(DOCKER_COMPOSE) exec laravel php artisan tinker
 
-init-laravel: ## Scaffold Laravel 12 with Inertia + Vue
+init-laravel: name ?= Data Bot
+init-laravel: ## Scaffold Laravel 12 with Inertia + Vue (usage: make init-laravel name="My App")
 	mkdir -p laravel
 	$(DOCKER_COMPOSE) build laravel
 	$(DOCKER_COMPOSE) run --rm laravel sh -c "composer create-project laravel/laravel /tmp/laravel-app && cp -a /tmp/laravel-app/. /var/www/html/"
 	$(DOCKER_COMPOSE) run --rm laravel php artisan key:generate
+	$(DOCKER_COMPOSE) run --rm laravel sh -c 'sed -i "s|^APP_NAME=.*|APP_NAME=$(name)|" /var/www/html/.env'
 	$(DOCKER_COMPOSE) run --rm laravel composer require inertiajs/inertia-laravel
 	$(DOCKER_COMPOSE) run --rm laravel sh -c "npm install && npm install @inertiajs/vue3 vue @vitejs/plugin-vue"
 	@echo ""
-	@echo "✔ Laravel project scaffolded with Inertia + Vue."
-	@echo "  Run 'make up' to start all services."
+	@echo "✔ Laravel project scaffolded with Inertia + Vue (APP_NAME=\"$(name)\")."
+	@echo "  Run 'make run' to start all services."
 
 fresh: ## Destroy volumes and rebuild everything
 	$(DOCKER_COMPOSE) down -v
 	$(DOCKER_COMPOSE) up -d --build
+
+run-fresh: fresh ## Fresh rebuild + run migrations and seed
+	$(DOCKER_COMPOSE) exec laravel php artisan migrate --force
+	$(DOCKER_COMPOSE) exec laravel php artisan db:seed --force

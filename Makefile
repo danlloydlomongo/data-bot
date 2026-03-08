@@ -51,7 +51,7 @@ fresh: ## Destroy volumes and rebuild everything
 
 run-fresh: ## Fresh rebuild + generate app key in env/laravel.env, run migrations and build assets
 	APP_KEY=base64:$$(openssl rand -base64 32 | tr -d '\n'); \
-	sed -i "s/^APP_KEY=.*/APP_KEY=$$APP_KEY/" env/laravel.env
+	sed -i "s|^APP_KEY=.*|APP_KEY=$$APP_KEY|" env/laravel.env
 	$(DOCKER_COMPOSE) down -v
 	$(DOCKER_COMPOSE) up -d --build
 	docker run --rm -v $(CURDIR)/laravel:/app -w /app --entrypoint composer composer:latest update --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-reqs

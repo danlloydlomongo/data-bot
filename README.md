@@ -129,7 +129,7 @@ This matters because a process can be **running but broken**. A health check let
 I would:
 
 - Put everything in **Docker Compose**: app, DB, reverse proxy.
-- Add a Makefile target that runs `docker compose down -v`, rebuilds and starts the stack, then runs `php artisan migrate --force` and `php artisan db:seed --force` via `docker compose exec` on the app container.
+- Add a Makefile target that runs `docker compose down -v`, rebuilds and starts the stack, then runs `php artisan key:generate` and `php artisan migrate --force` via `docker compose exec` on the app container, and finally builds the frontend assets.
 - A single command like:
 
 ```bash

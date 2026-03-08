@@ -49,9 +49,12 @@ fresh: ## Destroy volumes and rebuild everything
 	$(DOCKER_COMPOSE) down -v
 	$(DOCKER_COMPOSE) up -d --build
 
-run-fresh: fresh ## Fresh rebuild + generate app key, run migrations and build assets
+run-fresh: ## Fresh rebuild + generate app key in env/laravel.env, run migrations and build assets
+	APP_KEY=base64:$$(openssl rand -base64 32 | tr -d '\n'); \
+	sed -i "s/^APP_KEY=.*/APP_KEY=$$APP_KEY/" env/laravel.env
+	$(DOCKER_COMPOSE) down -v
+	$(DOCKER_COMPOSE) up -d --build
 	docker run --rm -v $(CURDIR)/laravel:/app -w /app --entrypoint composer composer:latest update --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-reqs
-	$(DOCKER_COMPOSE) exec laravel php artisan key:generate
 	$(DOCKER_COMPOSE) exec laravel php artisan migrate --force
 	$(DOCKER_COMPOSE) run --rm node sh -c "npm install && npm run build"
 

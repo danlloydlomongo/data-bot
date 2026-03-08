@@ -136,5 +136,5 @@ I would:
 make run-fresh
 ```
 
-That does exactly that: **starts all containers from scratch and prepares the database**.
+That does exactly that **starts all containers from scratch and prepares the database**.
 

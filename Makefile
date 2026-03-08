@@ -50,5 +50,7 @@ fresh: ## Destroy volumes and rebuild everything
 	$(DOCKER_COMPOSE) up -d --build
 
 run-fresh: fresh ## Fresh rebuild + run migrations and seed
+	docker run --rm -v $(CURDIR)/laravel:/app -w /app --entrypoint composer composer:latest update --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-reqs
 	$(DOCKER_COMPOSE) exec laravel php artisan migrate --force
-	$(DOCKER_COMPOSE) exec laravel php artisan db:seed --force
+	$(DOCKER_COMPOSE) run --rm node sh -c "npm install && npm run build"
+

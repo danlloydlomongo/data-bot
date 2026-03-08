@@ -12,6 +12,7 @@
                     <span class="text-xl font-bold text-white">Data Bot</span>
                 </div>
                 <nav class="flex items-center gap-4">
+                    <a href="/items" class="text-sm text-gray-300 hover:text-white transition">Items</a>
                     <a href="#features" class="text-sm text-gray-300 hover:text-white transition">Features</a>
                     <a href="#stack" class="text-sm text-gray-300 hover:text-white transition">Stack</a>
                 </nav>
